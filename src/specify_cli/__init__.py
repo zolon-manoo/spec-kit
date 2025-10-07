@@ -78,6 +78,7 @@ AI_CHOICES = {
     "auggie": "Auggie CLI",
     "roo": "Roo Code",
     "q": "Amazon Q Developer CLI",
+    "trae": "Trae AI",
 }
 # Add script type choices
 SCRIPT_TYPE_CHOICES = {"sh": "POSIX Shell (bash/zsh)", "ps": "PowerShell"}
@@ -751,7 +752,7 @@ def ensure_executable_scripts(project_path: Path, tracker: StepTracker | None = 
 @app.command()
 def init(
     project_name: str = typer.Argument(None, help="Name for your new project directory (optional if using --here, or use '.' for current directory)"),
-    ai_assistant: str = typer.Option(None, "--ai", help="AI assistant to use: claude, gemini, copilot, cursor, qwen, opencode, codex, windsurf, kilocode, auggie or q"),
+    ai_assistant: str = typer.Option(None, "--ai", help="AI assistant to use: claude, gemini, copilot, cursor, qwen, opencode, codex, windsurf, kilocode, auggie, roo, q or trae"),
     script_type: str = typer.Option(None, "--script", help="Script type to use: sh or ps"),
     ignore_agent_tools: bool = typer.Option(False, "--ignore-agent-tools", help="Skip checks for AI agent tools like Claude Code"),
     no_git: bool = typer.Option(False, "--no-git", help="Skip git repository initialization"),
@@ -1037,7 +1038,8 @@ def init(
         "auggie": ".augment/",
         "copilot": ".github/",
         "roo": ".roo/",
-        "q": ".amazonq/"
+        "q": ".amazonq/",
+        "trae": ".trae/"
     }
     
     if selected_ai in agent_folder_map:
@@ -1116,6 +1118,7 @@ def check():
     tracker.add("codex", "Codex CLI")
     tracker.add("auggie", "Auggie CLI")
     tracker.add("q", "Amazon Q Developer CLI")
+    tracker.add("trae", "Trae AI")
     
     git_ok = check_tool_for_tracker("git", tracker)
     claude_ok = check_tool_for_tracker("claude", tracker)  
@@ -1130,6 +1133,7 @@ def check():
     codex_ok = check_tool_for_tracker("codex", tracker)
     auggie_ok = check_tool_for_tracker("auggie", tracker)
     q_ok = check_tool_for_tracker("q", tracker)
+    trae_ok = check_tool_for_tracker("trae", tracker)
 
     console.print(tracker.render())
 
@@ -1137,7 +1141,7 @@ def check():
 
     if not git_ok:
         console.print("[dim]Tip: Install git for repository management[/dim]")
-    if not (claude_ok or gemini_ok or cursor_ok or qwen_ok or windsurf_ok or kilocode_ok or opencode_ok or codex_ok or auggie_ok or q_ok):
+    if not (claude_ok or gemini_ok or cursor_ok or qwen_ok or windsurf_ok or kilocode_ok or opencode_ok or codex_ok or auggie_ok or q_ok or trae_ok):
         console.print("[dim]Tip: Install an AI assistant for the best experience[/dim]")
 
 

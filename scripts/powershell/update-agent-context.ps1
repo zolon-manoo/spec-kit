@@ -25,7 +25,7 @@ Relies on common helper functions in common.ps1
 #>
 param(
     [Parameter(Position=0)]
-    [ValidateSet('claude','gemini','copilot','cursor','qwen','opencode','codex','windsurf','kilocode','auggie','roo','q')]
+    [ValidateSet('claude','gemini','copilot','cursor','qwen','opencode','codex','windsurf','kilocode','auggie','roo','q','trae')]
     [string]$AgentType
 )
 
@@ -55,6 +55,7 @@ $KILOCODE_FILE = Join-Path $REPO_ROOT '.kilocode/rules/specify-rules.md'
 $AUGGIE_FILE   = Join-Path $REPO_ROOT '.augment/rules/specify-rules.md'
 $ROO_FILE      = Join-Path $REPO_ROOT '.roo/rules/specify-rules.md'
 $Q_FILE        = Join-Path $REPO_ROOT 'AGENTS.md'
+$TRAE_FILE     = Join-Path $REPO_ROOT '.trae/rules/specify-rules.md'
 
 $TEMPLATE_FILE = Join-Path $REPO_ROOT '.specify/templates/agent-file-template.md'
 
@@ -378,7 +379,8 @@ function Update-SpecificAgent {
         'auggie'   { Update-AgentFile -TargetFile $AUGGIE_FILE   -AgentName 'Auggie CLI' }
         'roo'      { Update-AgentFile -TargetFile $ROO_FILE      -AgentName 'Roo Code' }
         'q'        { Update-AgentFile -TargetFile $Q_FILE        -AgentName 'Amazon Q Developer CLI' }
-        default { Write-Err "Unknown agent type '$Type'"; Write-Err 'Expected: claude|gemini|copilot|cursor|qwen|opencode|codex|windsurf|kilocode|auggie|roo|q'; return $false }
+        'trae'     { Update-AgentFile -TargetFile $TRAE_FILE     -AgentName 'Trae AI' }
+        default { Write-Err "Unknown agent type '$Type'"; Write-Err 'Expected: claude|gemini|copilot|cursor|qwen|opencode|codex|windsurf|kilocode|auggie|roo|q|trae'; return $false }
     }
 }
 
@@ -396,6 +398,7 @@ function Update-AllExistingAgents {
     if (Test-Path $AUGGIE_FILE)   { if (-not (Update-AgentFile -TargetFile $AUGGIE_FILE   -AgentName 'Auggie CLI')) { $ok = $false }; $found = $true }
     if (Test-Path $ROO_FILE)      { if (-not (Update-AgentFile -TargetFile $ROO_FILE      -AgentName 'Roo Code')) { $ok = $false }; $found = $true }
     if (Test-Path $Q_FILE)        { if (-not (Update-AgentFile -TargetFile $Q_FILE        -AgentName 'Amazon Q Developer CLI')) { $ok = $false }; $found = $true }
+    if (Test-Path $TRAE_FILE)     { if (-not (Update-AgentFile -TargetFile $TRAE_FILE     -AgentName 'Trae AI')) { $ok = $false }; $found = $true }
     if (-not $found) {
         Write-Info 'No existing agent files found, creating default Claude file...'
         if (-not (Update-AgentFile -TargetFile $CLAUDE_FILE -AgentName 'Claude Code')) { $ok = $false }
@@ -410,7 +413,7 @@ function Print-Summary {
     if ($NEW_FRAMEWORK) { Write-Host "  - Added framework: $NEW_FRAMEWORK" }
     if ($NEW_DB -and $NEW_DB -ne 'N/A') { Write-Host "  - Added database: $NEW_DB" }
     Write-Host ''
-    Write-Info 'Usage: ./update-agent-context.ps1 [-AgentType claude|gemini|copilot|cursor|qwen|opencode|codex|windsurf|kilocode|auggie|roo|q]'
+    Write-Info 'Usage: ./update-agent-context.ps1 [-AgentType claude|gemini|copilot|cursor|qwen|opencode|codex|windsurf|kilocode|auggie|roo|q|trae]'
 }
 
 function Main {

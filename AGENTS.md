@@ -39,6 +39,7 @@ Specify supports multiple AI agents by generating agent-specific command files a
 | **opencode** | `.opencode/command/` | Markdown | `opencode` | opencode CLI |
 | **Windsurf** | `.windsurf/workflows/` | Markdown | N/A (IDE-based) | Windsurf IDE workflows |
 | **Amazon Q Developer CLI** | `.amazonq/prompts/` | Markdown | `q` | Amazon Q Developer CLI |
+| **Trae AI** | `.trae/workflows/` | Markdown | `trae` | Trae AI IDE-based Agent |
 
 
 ### Step-by-Step Integration Guide
@@ -58,7 +59,8 @@ AI_CHOICES = {
     "qwen": "Qwen Code",
     "opencode": "opencode",
     "windsurf": "Windsurf",
-    "q": "Amazon Q Developer CLI"  # Add new agent here
+    "q": "Amazon Q Developer CLI",
+    "trae": "Trae AI"  # Add new agent here
 }
 ```
 
@@ -76,7 +78,8 @@ agent_folder_map = {
     "kilocode": ".kilocode/",
     "auggie": ".auggie/",
     "copilot": ".github/",
-    "q": ".amazonq/" # Add new agent folder here
+    "q": ".amazonq/",
+    "trae": ".trae/" # Add new agent folder here
 }
 ```
 
@@ -103,7 +106,7 @@ Modify `.github/workflows/scripts/create-release-packages.sh`:
 
 ##### Add to ALL_AGENTS array:
 ```bash
-ALL_AGENTS=(claude gemini copilot cursor qwen opencode windsurf q)
+ALL_AGENTS=(claude gemini copilot cursor qwen opencode windsurf q trae)
 ```
 
 ##### Add case statement for directory structure:
@@ -112,7 +115,10 @@ case $agent in
   # ... existing cases ...
   windsurf)
     mkdir -p "$base_dir/.windsurf/workflows"
-    generate_commands windsurf md "\$ARGUMENTS" "$base_dir/.windsurf/workflows" "$script" ;;
+    generate_commands windsurf md "$ARGUMENTS" "$base_dir/.windsurf/workflows" "$script" ;;
+  trae)
+    mkdir -p "$base_dir/.trae/workflows"
+    generate_commands trae md "$ARGUMENTS" "$base_dir/.trae/workflows" "$script" ;;
 esac
 ```
 
@@ -125,6 +131,8 @@ gh release create "$VERSION" \
   # ... existing packages ...
   .genreleases/spec-kit-template-windsurf-sh-"$VERSION".zip \
   .genreleases/spec-kit-template-windsurf-ps-"$VERSION".zip \
+  .genreleases/spec-kit-template-trae-sh-"$VERSION".zip \
+  .genreleases/spec-kit-template-trae-ps-"$VERSION".zip \
   # Add new agent packages here
 ```
 

@@ -69,6 +69,7 @@ WINDSURF_FILE="$REPO_ROOT/.windsurf/rules/specify-rules.md"
 KILOCODE_FILE="$REPO_ROOT/.kilocode/rules/specify-rules.md"
 AUGGIE_FILE="$REPO_ROOT/.augment/rules/specify-rules.md"
 ROO_FILE="$REPO_ROOT/.roo/rules/specify-rules.md"
+CODEBUDDY_FILE="$REPO_ROOT/.codebuddy/rules/specify-rules.md"
 Q_FILE="$REPO_ROOT/AGENTS.md"
 TRAE_FILE="$REPO_ROOT/.trae/rules/specify-rules.md"
 
@@ -583,6 +584,10 @@ update_specific_agent() {
             update_agent_file "$ROO_FILE" "Roo Code"
             ;;
         q)            
+        codebuddy)
+            update_agent_file "$CODEBUDDY_FILE" "CodeBuddy"
+            ;;
+        q)
             update_agent_file "$Q_FILE" "Amazon Q Developer CLI"
             ;;
         trae)
@@ -650,6 +655,11 @@ update_all_existing_agents() {
         found_agent=true
     fi
 
+    if [[ -f "$CODEBUDDY_FILE" ]]; then
+        update_agent_file "$CODEBUDDY_FILE" "CodeBuddy"
+        found_agent=true
+    fi
+
     if [[ -f "$Q_FILE" ]]; then
         update_agent_file "$Q_FILE" "Amazon Q Developer CLI"
         found_agent=true
@@ -683,7 +693,8 @@ print_summary() {
     fi
     
     echo
-    log_info "Usage: $0 [claude|gemini|copilot|cursor|qwen|opencode|codex|windsurf|kilocode|auggie|roo|q|trae]"
+
+    log_info "Usage: $0 [claude|gemini|copilot|cursor|qwen|opencode|codex|windsurf|kilocode|auggie|codebuddy|q|trae]"
 }
 
 #==============================================================================
